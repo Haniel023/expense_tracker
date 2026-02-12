@@ -37,6 +37,7 @@ def index():
     total_expense = sum(r["amount"] for r in rows if r["type"] == "expense")
     balance = total_income - total_expense
 
+
     return render_template(
         "index.html",
         transaction=rows,
@@ -76,11 +77,11 @@ def add_transaction():
 @app.route("/delete/<int:txn_id>", methods=["POST"])
 def delete_transaction(txn_id):
     conn = get_db_connection()
-    conn.execute("DELETE FROM transactions WHERE id = ?", (txn_id))
+    conn.execute("DELETE FROM transactions WHERE id = ?", (txn_id,))
     conn.commit()
     conn.close()
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=4020)
